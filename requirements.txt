@@ -1,0 +1,9 @@
+Flask
+Flask-SQLAlchemy
+Flask-Login
+python-dotenv
+Werkzeug
+Flask-SocketIO
+python-socketio[asyncio]
+psycopg2-binary
+gunicorn

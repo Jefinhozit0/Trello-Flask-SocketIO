@@ -1,0 +1,205 @@
+/* =================================================================
+   ESTILOS GERAIS E VARIÁVEIS
+   ================================================================= */
+:root {
+    --color-primary: #667eea;
+    --color-primary-dark: #764ba2;
+    --color-success: #28a745;
+    --color-danger: #dc3545;
+    --color-background: #f8f9fa;
+    --color-surface: #ffffff;
+    --color-text: #212529;
+    --color-text-muted: #6c757d;
+    --color-border: #dee2e6;
+    --color-column-bg: #f0f2f5;
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 8px rgba(0,0,0,0.1);
+    --border-radius: 8px;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    margin: 0;
+}
+
+/* =================================================================
+   ESTILOS DAS PÁGINAS DE AUTENTICAÇÃO
+   ================================================================= */
+body.auth-page {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    display: flex; justify-content: center; align-items: center; height: 100vh;
+}
+body.auth-page .content { max-width: 450px; width: 100%; padding: 20px; }
+body.auth-page nav { display: none; }
+.auth-container { width: 100%; }
+.auth-card {
+    background: var(--color-surface); padding: 40px; border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1); text-align: center;
+}
+.auth-card h2 { margin-top: 0; margin-bottom: 10px; font-size: 1.8em; }
+.auth-subtitle { color: var(--color-text-muted); margin-bottom: 30px; }
+.auth-card .form-group { margin-bottom: 20px; text-align: left; }
+.auth-card label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9em; }
+.auth-card input {
+    width: 100%; padding: 12px 15px; border: 1px solid var(--color-border);
+    border-radius: var(--border-radius); box-sizing: border-box; font-size: 1em;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+.auth-card input:focus {
+    outline: none; border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+.auth-button {
+    width: 100%; padding: 15px; border: none; border-radius: var(--border-radius);
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-dark) 100%);
+    color: white; font-size: 1.1em; font-weight: bold; cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.auth-button:hover { box-shadow: 0 4px 15px rgba(0,0,0,0.2); transform: translateY(-2px); }
+.auth-footer { margin-top: 25px; font-size: 0.9em; color: var(--color-text-muted); }
+.auth-footer a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+
+/* =================================================================
+   ESTILOS GERAIS DA APLICAÇÃO (PÓS-LOGIN)
+   ================================================================= */
+nav {
+    background-color: var(--color-surface); padding: 15px 40px;
+    box-shadow: var(--shadow-sm); display: flex; justify-content: flex-end;
+    align-items: center; gap: 25px;
+}
+nav a { text-decoration: none; color: var(--color-text-muted); font-weight: 600; transition: color 0.2s; }
+nav a:hover { color: var(--color-primary); }
+
+.content { max-width: 1100px; margin: 40px auto; padding: 0 20px; }
+
+.page-header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-bottom: 20px; border-bottom: 1px solid var(--color-border); margin-bottom: 30px;
+}
+.page-header h1 { margin: 0; }
+.page-header p { margin: 5px 0 0; color: var(--color-text-muted); }
+
+.btn {
+    padding: 12px 20px; border: none; border-radius: var(--border-radius);
+    font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block;
+    background-color: #e9ecef; color: #343a40; transition: all 0.2s;
+}
+.btn:hover { background-color: #ced4da; }
+.btn-primary { background-color: var(--color-primary); color: white; }
+.btn-primary:hover { background-color: var(--color-primary-dark); }
+.btn-delete {
+    background: none; border: 1px solid var(--color-danger); color: var(--color-danger);
+    padding: 5px 10px; border-radius: var(--border-radius); cursor: pointer;
+    font-size: 0.8em; font-weight: 600; transition: all 0.2s;
+}
+.btn-delete:hover { background-color: var(--color-danger); color: white; }
+
+.flash { padding: 15px; margin: 20px 0; border-radius: 4px; border: 1px solid transparent; }
+.flash.success { background-color: #d4edda; color: #155724; border-color: #c3e6cb;}
+.flash.error { background-color: #f8d7da; color: #721c24; border-color: #f5c6cb; }
+.flash.warning { background-color: #fff3cd; color: #856404; border-color: #ffeeba; }
+
+.card {
+    background-color: var(--color-surface); padding: 25px;
+    border-radius: var(--border-radius); box-shadow: var(--shadow-sm); margin-bottom: 20px;
+}
+
+/* =================================================================
+   ESTILOS DO DASHBOARD
+   ================================================================= */
+.create-board-form { display: flex; gap: 10px; }
+.create-board-form input {
+    padding: 12px; font-size: 1em; border-radius: var(--border-radius);
+    border: 1px solid var(--color-border); min-width: 250px;
+}
+.page-content h2 { font-size: 1.5em; margin-top: 40px; margin-bottom: 20px; }
+.boards-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
+}
+.board-card {
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.board-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+.board-card-link { text-decoration: none; color: inherit; }
+.board-card h3 { margin: 0 0 10px 0; }
+.board-card-owner { font-size: 0.9em; color: var(--color-text-muted); margin: 0; }
+.board-card-actions {
+    margin-top: 20px; padding-top: 15px; border-top: 1px solid var(--color-border);
+    display: flex; justify-content: flex-end; gap: 10px;
+}
+.board-card-actions .btn-edit {
+    background: none; border: 1px solid var(--color-text-muted); color: var(--color-text-muted);
+    padding: 5px 10px; font-size: 0.8em; font-weight: 600;
+}
+.board-card-actions .btn-edit:hover { background-color: var(--color-text-muted); color: white; }
+
+.edit-board-form { display: flex; gap: 10px; align-items: center; }
+.edit-board-form input { flex-grow: 1; padding: 8px; border: 1px solid #ccc; border-radius: 4px; font-size: 1.1em; }
+.btn-save-name {
+    background-color: var(--color-success); color: white; border: none;
+    padding: 8px 15px; border-radius: 4px; cursor: pointer; font-weight: 500;
+}
+.empty-state {
+    color: var(--color-text-muted); grid-column: 1 / -1;
+    text-align: center; padding: 40px;
+}
+
+/* =================================================================
+   ESTILOS DA PÁGINA DO QUADRO
+   ================================================================= */
+.board-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; }
+.board-owner { color: #555; font-size: 0.9em; margin-left: 15px;}
+
+.add-task-form { display: flex; gap: 10px; }
+.add-task-form input { flex-grow: 1; padding: 12px; font-size: 1em; border-radius: var(--border-radius); border: 1px solid var(--color-border); }
+
+.kanban-board-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 25px; margin-top: 30px; }
+.kanban-column { background-color: var(--color-column-bg); padding: 15px; border-radius: var(--border-radius); }
+.column-title {
+    font-size: 1.1em; font-weight: 600; margin: 0 0 20px 0;
+    padding-bottom: 15px; border-bottom: 2px solid var(--color-border);
+    display: flex; align-items: center; gap: 8px;
+}
+.task-list { min-height: 100px; }
+.task-card {
+    background-color: var(--color-surface); padding: 15px; border-radius: 6px;
+    box-shadow: var(--shadow-sm); margin-bottom: 10px; cursor: pointer;
+    transition: box-shadow 0.2s;
+}
+.task-card:hover { box-shadow: 0 4px 8px rgba(0,0,0,0.15); }
+.task-ghost { background-color: #cce5ff; border: 1px dashed var(--color-primary); opacity: 0.7; }
+
+.members-section { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+.members-list ul { list-style-type: none; padding: 0; margin: 0; }
+.members-list li { padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+.members-list li:last-child { border-bottom: none; }
+.invite-member-card .form-group { display: flex; gap: 10px; }
+.invite-member-card input { flex-grow: 1; }
+.invite-member-card .btn { padding: 12px 20px; }
+
+/* =================================================================
+   ESTILOS DO MODAL DE TAREFA
+   ================================================================= */
+.modal-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6); display: none; justify-content: center;
+    align-items: center; z-index: 1000;
+}
+.modal-content {
+    background: var(--color-surface); padding: 30px; border-radius: var(--border-radius);
+    width: 90%; max-width: 500px; box-shadow: var(--shadow-md);
+}
+.modal-content h3 { margin-top: 0; }
+.close-modal { float: right; font-size: 1.5em; font-weight: bold; line-height: 1; cursor: pointer; color: #aaa; }
+.modal-actions { margin-top: 20px; display: flex; justify-content: space-between; align-items: center; }
+.modal-actions .btn-primary { padding: 10px 20px;}
+#task-edit-form .form-group { margin-bottom: 15px; }
+#task-edit-form label { display: block; margin-bottom: 5px; font-weight: 500; }
+#task-edit-form input, #task-edit-form textarea {
+    width: 100%; padding: 10px; border: 1px solid var(--color-border);
+    border-radius: 4px; box-sizing: border-box;
+}
+#task-edit-form textarea { min-height: 80px; }

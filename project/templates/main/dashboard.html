@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block title %}Seu Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="header-content">
+        <h1>Seu Dashboard</h1>
+        <p>Bem-vindo de volta, {{ user.username }}!</p>
+    </div>
+    <div class="header-actions">
+        <form class="create-board-form" method="POST" action="{{ url_for('main.create_board') }}">
+            <input type="text" name="board_name" placeholder="Nome do Novo Quadro" required>
+            <button type="submit" class="btn btn-primary">+ Criar Quadro</button>
+        </form>
+    </div>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+            <div class="flash {{ category }}">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="page-content">
+    <h2>Seus Quadros</h2>
+    <div class="boards-grid">
+        {% if boards %}
+            {% for board in boards %}
+                <div class="card board-card" id="board-card-{{ board.id }}">
+                    <div class="board-card-content">
+                        <div class="board-title-view">
+                            <a href="{{ url_for('main.view_board', board_id=board.id) }}" class="board-card-link">
+                                <h3 id="board-title-{{ board.id }}">{{ board.name }}</h3>
+                            </a>
+                            <p class="board-card-owner">
+                                {% if board.owner == current_user %}
+                                    Você é o dono
+                                {% else %}
+                                    Criado por: {{ board.owner.username }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        {% if board.owner == current_user %}
+                        <form class="edit-board-form" data-board-id="{{ board.id }}" style="display: none;">
+                            <input type="text" name="new_board_name" value="{{ board.name }}" required>
+                            <button type="submit" class="btn-save-name">Salvar</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                    
+                    {% if board.owner == current_user %}
+                    <div class="board-card-actions">
+                        <button class="btn-edit" data-board-id="{{ board.id }}">Editar</button>
+                        <form method="POST" action="{{ url_for('main.delete_board', board_id=board.id) }}" onsubmit="return confirm('Tem certeza que deseja excluir este quadro e todas as suas tarefas?');">
+                            <button type="submit" class="btn-delete">Excluir</button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% else %}
+            <p class="empty-state">Você ainda não tem nenhum quadro. Crie um no campo acima para começar!</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='dashboard.js') }}"></script>
+{% endblock %}
