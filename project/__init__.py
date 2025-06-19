@@ -3,6 +3,7 @@ from flask import Flask
 from flask_login import LoginManager
 from flask_socketio import SocketIO
 from dotenv import load_dotenv
+from sqlalchemy.pool import NullPool # <-- NOVA IMPORTAÇÃO
 from .models import db, User
 
 socketio = SocketIO()
@@ -19,6 +20,10 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = database_url or 'sqlite:///db.sqlite'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+    # --- NOVA LINHA DE CONFIGURAÇÃO ---
+    # Desabilita o pooling padrão do SQLAlchemy para ser compatível com eventlet
+    app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {'poolclass': NullPool}
     
     db.init_app(app)
     socketio.init_app(app)
@@ -36,5 +41,9 @@ def create_app():
 
     from .main import main as main_blueprint
     app.register_blueprint(main_blueprint)
+
+    # Lembre-se de manter esta seção comentada ou removida para produção
+    # with app.app_context():
+    #     db.create_all()
 
     return app
