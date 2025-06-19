@@ -15,92 +15,30 @@
     </div>
 </div>
 
-<div class="members-section">
-    <div class="card members-list">
-        <h4>Membros Atuais</h4>
-        <ul>
-            {% for member in board.members %}
-                <li>{{ member.username }} {% if member.id == board.user_id %}(Dono){% endif %}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% if current_user.id == board.user_id %}
-    <div class="card invite-member-card">
-        <h4>Convidar Novo Membro</h4>
-        <form method="POST" action="{{ url_for('main.add_member', board_id=board.id) }}">
-            <div class="form-group">
-                <input type="email" name="email" placeholder="Email do usuário" required>
-                <button type="submit" class="btn">Convidar</button>
-            </div>
-        </form>
-    </div>
-    {% endif %}
-</div>
-
-<div class="card add-task-card">
-    <form class="add-task-form" method="POST" action="{{ url_for('main.add_task', board_id=board.id) }}">
-        <input type="text" name="task_title" placeholder="Adicionar nova tarefa..." required>
-        <button type="submit" class="btn btn-primary">+ Adicionar</button>
-    </form>
-</div>
-
-{% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-        {% for category, message in messages %}
-            <div class="flash {{ category }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-{% endwith %}
-
-<div class="kanban-board-container">
-    {% for status in ['pending', 'inprogress', 'completed'] %}
-    <div class="kanban-column">
-        <h2 class="column-title">
-            {% if status == 'pending' %}📋 Pendente{% elif status == 'inprogress' %}⚙️ Em Andamento{% else %}✅ Concluída{% endif %}
-        </h2>
-        <div class="task-list" id="{{ status }}-list" data-status="{{ status }}">
-            {% for task in tasks[status] %}
-                <div class="task-card" data-task-id="{{ task.id }}">
-                    <div class="task-card-title">{{ task.title }}</div>
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}">
-                        {% if task.assignee %}
-                            👤 {{ task.assignee.username }}
-                        {% endif %}
-                    </div>
-                </div>
-            {% endfor %}
+<div class="page-content" style="margin-top: 0; padding-top: 0;">
+    <div class="members-section">
+        <div class="card members-list">
+            <h4>Membros Atuais</h4>
+            <ul>
+                {% for member in board.members %}
+                    <li>{{ member.username }} {% if member.id == board.user_id %}(Dono){% endif %}</li>
+                {% endfor %}
+            </ul>
         </div>
+        {% if current_user.id == board.user_id %}
+        <div class="card invite-member-card">
+            <h4>Convidar Novo Membro</h4>
+            <form method="POST" action="{{ url_for('main.add_member', board_id=board.id) }}">
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email do usuário" required>
+                    <button type="submit" class="btn">Convidar</button>
+                </div>
+            </form>
+        </div>
+        {% endif %}
     </div>
-    {% endfor %}
 </div>
 
-<div id="task-modal" class="modal-overlay">
-    <div class="modal-content">
-        <span id="close-modal-btn" class="close-modal">&times;</span>
-        <h3>Editar Tarefa</h3>
-        <form id="task-edit-form">
-            <input type="hidden" id="modal-task-id">
-            <div class="form-group">
-                <label for="modal-task-title">Título</label>
-                <input type="text" id="modal-task-title" required>
-            </div>
-            <div class="form-group">
-                <label for="modal-task-description">Descrição</label>
-                <textarea id="modal-task-description" rows="4"></textarea>
-            </div>
-            <div class="form-group">
-                <label for="modal-task-assignee">Atribuir para:</label>
-                <select id="modal-task-assignee">
-                    <option value="None">Ninguém</option>
-                </select>
-            </div>
-            <div class="modal-actions">
-                <button type="button" id="delete-task-btn" class="btn-delete">Excluir Tarefa</button>
-                <button type="submit" class="btn btn-primary">Salvar Alterações</button>
-            </div>
-        </form>
-    </div>
-</div>
 {% endblock %}
 
 {% block scripts %}

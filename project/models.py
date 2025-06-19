@@ -4,6 +4,7 @@ from datetime import datetime
 
 db = SQLAlchemy()
 
+# Tabela de associação que conecta Usuários a Quadros
 board_members = db.Table('board_members',
     db.Column('user_id', db.Integer, db.ForeignKey('user.id'), primary_key=True),
     db.Column('board_id', db.Integer, db.ForeignKey('board.id'), primary_key=True)
@@ -14,15 +15,24 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    
+    # Relação para os quadros que o usuário CRIOU
     owned_boards = db.relationship('Board', backref='owner', lazy=True, foreign_keys='Board.user_id')
-    boards = db.relationship('Board', secondary=board_members, lazy='subquery', backref=db.backref('members', lazy=True))
+
+    # Relação para os quadros dos quais o usuário é MEMBRO
+    boards = db.relationship('Board', secondary=board_members, lazy='subquery',
+        backref=db.backref('members', lazy=True))
+    
     assigned_tasks = db.relationship('Task', backref='assignee', lazy=True, foreign_keys='Task.assignee_id')
 
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    # Chave estrangeira para o DONO do quadro
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    
     tasks = db.relationship('Task', backref='board', lazy=True, cascade="all, delete-orphan")
 
 class Task(db.Model):

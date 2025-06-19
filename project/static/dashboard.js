@@ -41,20 +41,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 } else {
                     alert('Erro ao renomear o quadro: ' + (data.message || 'Erro desconhecido'));
                 }
-            }).catch(err => {
-                console.error("Fetch error:", err);
-                alert("Ocorreu um erro de comunicação.");
             });
         });
     });
 
-    // --- Lógica de Socket.IO para o Dashboard ---
     const socket = io();
 
-    // Ouve por eventos de renomeação de quadros na página do dashboard
+    // Ouve por eventos de renomeação na página do quadro e no dashboard
     socket.on('board_renamed', function(data) {
         const { board_id, new_name } = data;
-        const titleHeader = document.querySelector(`#board-card-${board_id} .board-title-view h3`);
+        const mainTitle = document.getElementById('main-board-title');
+        if (document.body.dataset.boardId == board_id && mainTitle) {
+            mainTitle.textContent = new_name;
+        }
+    });
+
+    socket.on('board_renamed_dashboard', function(data) {
+        const { board_id, new_name } = data;
+        const titleHeader = document.getElementById(`board-title-${board_id}`);
         if (titleHeader) {
             titleHeader.textContent = new_name;
         }
