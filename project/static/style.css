@@ -203,3 +203,15 @@ nav a:hover { color: var(--color-primary); }
     border-radius: 4px; box-sizing: border-box;
 }
 #task-edit-form textarea { min-height: 80px; }
+/* Adicione ao final de style.css */
+
+.task-card-title {
+    font-weight: 500;
+}
+.task-card-assignee {
+    font-size: 0.8em;
+    color: var(--color-text-muted);
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid #f0f0f0;
+}

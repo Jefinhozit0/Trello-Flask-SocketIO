@@ -14,8 +14,14 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(100), unique=True, nullable=False)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
+    
     owned_boards = db.relationship('Board', backref='owner', lazy=True, foreign_keys='Board.user_id')
-    boards = db.relationship('Board', secondary=board_members, lazy='subquery', backref=db.backref('members', lazy=True))
+    boards = db.relationship('Board', secondary=board_members, lazy='subquery',
+        backref=db.backref('members', lazy=True))
+
+    # --- NOVA RELAÇÃO ---
+    # Para acessar todas as tarefas atribuídas a este usuário
+    assigned_tasks = db.relationship('Task', backref='assignee', lazy=True, foreign_keys='Task.assignee_id')
 
 class Board(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -31,3 +37,7 @@ class Task(db.Model):
     status = db.Column(db.String(20), default='pending')
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     board_id = db.Column(db.Integer, db.ForeignKey('board.id'), nullable=False)
+
+    # --- NOVO CAMPO E RELAÇÃO ---
+    # Chave estrangeira para o usuário responsável pela tarefa
+    assignee_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)
