@@ -1,63 +1,101 @@
-# Plataforma de Gestão de Projetos Colaborativa (Trello Clone)
+# Plataforma de Gestão de Projetos Colaborativa em Tempo Real
 
-![Badge de Licença](https://img.shields.io/badge/license-MIT-blue.svg)
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white" alt="Python Version">
+  <img src="https://img.shields.io/badge/Flask-3.0+-black?logo=flask&logoColor=white" alt="Flask Version">
+  <img src="https://img.shields.io/badge/Socket.IO-4.7-black?logo=socketdotio&logoColor=white" alt="Socket.IO">
+  <img src="https://img.shields.io/badge/Deployed%20on-Render-46E3B7?logo=render" alt="Deployed on Render">
+  <img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License">
+</p>
 
-Uma aplicação web full-stack completa, inspirada no Trello, que permite a gestão de projetos de forma colaborativa e em tempo real. Desenvolvida com Flask e JavaScript, a plataforma inclui autenticação de usuários, criação de quadros, sistema de convites e atualizações instantâneas via WebSockets.
+<p align="center">
+  Um clone completo da ferramenta Trello, desenvolvido com Flask e JavaScript, focado em colaboração e atualizações instantâneas com WebSockets.
+</p>
+
+<p align="center">
+  <a href="https://trello-jefferson.onrender.com/"><strong>➥ Ver Aplicação Ao Vivo</strong></a>
+</p>
+
+---
 
 ## Demonstração Visual
 
-**DICA:** Grave um GIF rápido da tela mostrando o fluxo completo: login, criação de um quadro, convite de um segundo usuário e a movimentação de tarefas atualizando em tempo real para ambos. Isso é extremamente poderoso para um portfólio.
+*É altamente recomendado gravar um GIF rápido mostrando as funcionalidades em ação, especialmente a colaboração em tempo real entre duas janelas de navegador.*
 
-![GIF da Aplicação](caminho/para/seu/gif_ou_imagem.gif)
+![GIF de Demonstração do Trello Clone](https://i.imgur.com/uP1M2b6.png) 
+*(Substitua esta imagem por um GIF ou screenshot seu!)*
 
-## Funcionalidades Principais
+## 🚀 Funcionalidades Principais
 
--   **Autenticação de Usuários:** Sistema completo e seguro de cadastro, login e logout (`Flask-Login`).
--   **Dashboard Pessoal:** Cada usuário possui um painel que exibe todos os quadros que ele criou e também os quadros para os quais foi convidado.
--   **Gerenciamento de Quadros (Boards):**
-    -   Criação de múltiplos quadros para diferentes projetos.
-    -   Edição do nome do quadro (com atualização em tempo real para membros).
-    -   Exclusão de quadros (ação restrita apenas ao dono).
--   **Sistema de Colaboração por Times:**
-    -   O dono de um quadro pode convidar outros usuários cadastrados por e-mail.
-    -   Membros convidados podem visualizar e interagir com as tarefas do quadro.
--   **Gestão de Tarefas (Cards):**
-    -   Criação de tarefas dentro de colunas específicas ("Pendente", "Em Andamento", "Concluída").
-    -   Edição de título e descrição das tarefas através de um modal interativo.
-    -   Exclusão de tarefas.
--   **✨ Atualizações em Tempo Real (WebSockets):**
-    -   Quando um usuário move uma tarefa, a mudança é refletida **instantaneamente** na tela de todos os outros membros que estão visualizando o mesmo quadro, sem a necessidade de recarregar a página.
-    -   Novas tarefas, edições e exclusões também aparecem em tempo real para todos os colaboradores.
+Este projeto vai além de um simples CRUD, implementando funcionalidades complexas para criar uma experiência de usuário rica e moderna.
 
-## Tecnologias Utilizadas
+* **👥 Sistema de Autenticação Completo:**
+    * Cadastro de novos usuários com e-mail e senha.
+    * Login seguro com sessões persistentes (`Flask-Login`).
+    * Hashing de senhas para segurança (`Werkzeug`).
 
-#### **Back-end**
+* **🗂️ Gestão de Quadros (Boards) e Times:**
+    * Criação, renomeação e exclusão de múltiplos quadros por usuário.
+    * **Sistema de Convites:** O dono de um quadro pode convidar outros usuários cadastrados por e-mail para colaborar.
+    * **Controle de Permissão:** Apenas o dono do quadro pode gerenciá-lo (renomear, excluir, convidar).
 
--   **Python 3**
--   **Flask:** Microframework web para a API e rotas.
--   **Flask-SocketIO:** Para comunicação em tempo real com WebSockets.
--   **Flask-SQLAlchemy:** ORM para interação com o banco de dados.
--   **Flask-Login:** Gerenciamento de sessões de usuário.
--   **Gunicorn / Eventlet:** Servidor de aplicação WSGI para produção.
+* **📝 Gestão Completa de Tarefas (Cards):**
+    * Criação e exclusão de tarefas dentro de colunas específicas.
+    * **Modal de Edição:** Clique em uma tarefa para abrir um modal e editar seu título e descrição.
+    * **Atribuição de Tarefas:** Designe tarefas para membros específicos do quadro através de um menu dropdown no modal.
 
-#### **Front-end**
+* **✨ A Mágica do Tempo Real com WebSockets:**
+    * Quando um usuário move uma tarefa, a mudança é refletida **instantaneamente** na tela de todos os outros membros do time.
+    * Novas tarefas, edições de título, atribuições e exclusões também aparecem em tempo real para todos, sem a necessidade de recarregar a página.
 
--   **HTML5 / CSS3**
--   **JavaScript (ES6+):** Manipulação do DOM, requisições (`fetch`) e lógica do cliente Socket.IO.
--   **Jinja2:** Engine de templates para renderização dinâmica.
--   **Sortable.js:** Biblioteca para a funcionalidade de arrastar e soltar.
+## 🛠️ Tecnologias Utilizadas
 
-#### **Banco de Dados**
+<table align="center">
+  <tr>
+    <td align="center"><strong>Back-end</strong></td>
+    <td align="center"><strong>Front-end</strong></td>
+    <td align="center"><strong>Banco de Dados & Deploy</strong></td>
+  </tr>
+  <tr>
+    <td>
+      • Python<br>
+      • Flask<br>
+      • Flask-SocketIO<br>
+      • Flask-SQLAlchemy<br>
+      • Flask-Login<br>
+      • Gunicorn & Eventlet
+    </td>
+    <td>
+      • HTML5 & CSS3<br>
+      • JavaScript (ES6+)<br>
+      • Fetch API<br>
+      • Socket.IO Client<br>
+      • Sortable.js<br>
+      • Jinja2
+    </td>
+    <td>
+      • PostgreSQL (Produção)<br>
+      • SQLite (Desenvolvimento)<br>
+      • Render (Hospedagem)
+    </td>
+  </tr>
+</table>
 
--   **SQLite:** Para desenvolvimento local.
--   **PostgreSQL:** Para o ambiente de produção.
+## 🧠 Desafios Técnicos e Aprendizados
 
-## Como Executar Localmente
+* **Arquitetura de Banco de Dados:** Modelar a relação **Muitos-para-Muitos** entre Usuários e Quadros para permitir a colaboração em times.
+* **Comunicação em Tempo Real:** Implementar uma arquitetura baseada em eventos com WebSockets para sincronizar o estado da aplicação entre múltiplos clientes, usando "salas" para garantir que as atualizações sejam enviadas apenas para os usuários relevantes.
+* **Deploy em Ambiente de Produção:** Migrar de SQLite para PostgreSQL e configurar um servidor WSGI (Gunicorn com worker `eventlet`) para lidar com as conexões persistentes do Socket.IO na plataforma Render.
+* **Segurança:** Implementar verificações de permissão em todas as rotas para garantir que um usuário só possa modificar os quadros e tarefas aos quais ele tem acesso.
 
-1.  **Clone o repositório**:
+## ⚙️ Como Executar Localmente
+
+Siga os passos abaixo para rodar o projeto na sua máquina.
+
+1.  **Clone o repositório:**
     ```bash
-    git clone [https://github.com/Jefinhozit0/Trello-Flask-SocketIO.git]
-    cd seu-repositorio
+    git clone [https://github.com/Jefinhozit0/Trello-Flask-SocketIO.git](https://github.com/Jefinhozit0/Trello-Flask-SocketIO.git)
+    cd Trello-Flask-SocketIO
     ```
 
 2.  **Crie e ative um ambiente virtual:**
@@ -73,9 +111,9 @@ Uma aplicação web full-stack completa, inspirada no Trello, que permite a gest
     ```
 
 4.  **Configure as variáveis de ambiente:**
-    Crie um arquivo `.env` na raiz do projeto e adicione sua chave secreta:
+    Crie um arquivo `.env` na raiz do projeto e adicione uma chave secreta:
     ```
-    SECRET_KEY='uma-chave-secreta-forte-e-aleatoria'
+    SECRET_KEY='sua-chave-secreta-forte-e-aleatoria'
     ```
 
 5.  **Crie o banco de dados local:**
@@ -91,8 +129,11 @@ Uma aplicação web full-stack completa, inspirada no Trello, que permite a gest
 
 7.  Acesse `http://127.0.0.1:5000` no seu navegador.
 
-## Autor
+## 👨‍💻 Autor
 
 **Jefferson**
 
--   GitHub: [@Jefinhozit0](https://github.com/Jefinhozit0)
+* **GitHub:** [@Jefinhozit0](https://github.com/Jefinhozit0)
+* **LinkedIn:** [Seu Perfil do LinkedIn Aqui](https://www.linkedin.com/)
+
+---
