@@ -20,7 +20,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 modalTaskTitle.value = task.title;
                 modalTaskDescription.value = task.description;
 
-                // Limpa e popula o dropdown de membros
                 modalTaskAssignee.innerHTML = '<option value="None">Ninguém</option>';
                 task.members.forEach(member => {
                     const option = document.createElement('option');
@@ -40,7 +39,6 @@ document.addEventListener('DOMContentLoaded', function () {
         modal.style.display = 'none';
     }
 
-    // Event listener para abrir o modal ao clicar em um card
     document.querySelector('.kanban-board-container').addEventListener('click', function(e) {
         const taskCard = e.target.closest('.task-card');
         if (taskCard) {
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target === modal) closeTaskModal();
     });
 
-    // Salvar alterações da tarefa (agora com o assignee)
     taskEditForm.addEventListener('submit', function(e) {
         e.preventDefault();
         const taskId = modalTaskId.value;
@@ -69,7 +66,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }).then(() => closeTaskModal());
     });
 
-    // Deletar tarefa
     deleteTaskBtn.addEventListener('click', function() {
         const taskId = modalTaskId.value;
         if (confirm('Tem certeza que deseja excluir esta tarefa?')) {
@@ -79,15 +75,12 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // --- Lógica do Socket.IO ---
-    socket.on('connect', () => {
-        if (boardId) socket.emit('join', { room: `board-${boardId}` });
-    });
+    socket.on('connect', () => { if (boardId) socket.emit('join', { room: `board-${boardId}` }); });
 
     socket.on('task_created', (data) => {
         const { task_id, title, status, assignee } = data;
         const targetColumnList = document.querySelector(`.task-list[data-status="${status}"]`);
         
-        // Só cria o card se ele ainda não existir na tela
         if (targetColumnList && !document.querySelector(`[data-task-id="${task_id}"]`)) {
             const taskCard = document.createElement('div');
             taskCard.className = 'task-card';
@@ -102,8 +95,6 @@ document.addEventListener('DOMContentLoaded', function () {
             assigneeDiv.id = `assignee-for-task-${task_id}`;
             if (assignee) {
                 assigneeDiv.textContent = `👤 ${assignee.username}`;
-            } else {
-                assigneeDiv.style.display = 'none';
             }
             
             taskCard.appendChild(titleDiv);
@@ -129,10 +120,8 @@ document.addEventListener('DOMContentLoaded', function () {
             const assigneeDiv = taskCard.querySelector('.task-card-assignee');
             if (assignee) {
                 assigneeDiv.textContent = `👤 ${assignee.username}`;
-                assigneeDiv.style.display = 'block';
             } else {
                 assigneeDiv.textContent = '';
-                assigneeDiv.style.display = 'none';
             }
         }
     });
@@ -145,16 +134,12 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    window.addEventListener('beforeunload', () => {
-        if (boardId) socket.emit('leave', { room: `board-${boardId}` });
-    });
+    window.addEventListener('beforeunload', () => { if (boardId) socket.emit('leave', { room: `board-${boardId}` }); });
 
     // --- Lógica do Drag and Drop (SortableJS) ---
     document.querySelectorAll('.task-list').forEach(column => {
         new Sortable(column, {
-            group: 'kanban', 
-            animation: 150, 
-            ghostClass: 'task-ghost',
+            group: 'kanban', animation: 150, ghostClass: 'task-ghost',
             onEnd: (evt) => {
                 updateTaskStatus(evt.item.dataset.taskId, evt.to.dataset.status);
             }

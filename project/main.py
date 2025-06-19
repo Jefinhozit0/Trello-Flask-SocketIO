@@ -15,7 +15,7 @@ def index():
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    user_boards = current_user.boards
+    user_boards = current_user.boards 
     return render_template('main/dashboard.html', user=current_user, boards=user_boards)
 
 @main.route('/create-board', methods=['POST'])
@@ -80,6 +80,7 @@ def add_task(board_id):
     board = Board.query.get_or_404(board_id)
     if current_user not in board.members:
         abort(403)
+    
     task_title = request.form.get('task_title')
     if not task_title:
         flash('O título da tarefa não pode ser vazio.', 'error')
@@ -87,9 +88,12 @@ def add_task(board_id):
         new_task = Task(title=task_title, board_id=board.id, status='pending')
         db.session.add(new_task)
         db.session.commit()
-        event_data = {'task_id': new_task.id, 'title': new_task.title, 'status': new_task.status}
+        
+        assignee_info = {'id': new_task.assignee.id, 'username': new_task.assignee.username} if new_task.assignee else None
+        event_data = {'task_id': new_task.id, 'title': new_task.title, 'status': new_task.status, 'assignee': assignee_info}
         socketio.emit('task_created', event_data, room=f'board-{board_id}')
         flash('Tarefa adicionada com sucesso!', 'success')
+    
     return redirect(url_for('main.view_board', board_id=board.id))
 
 @main.route('/update-task-status/<int:task_id>', methods=['PATCH'])
@@ -98,14 +102,18 @@ def update_task_status(task_id):
     task = Task.query.get_or_404(task_id)
     if current_user not in task.board.members:
         abort(403)
+
     data = request.get_json()
     new_status = data.get('status')
     if new_status not in ['pending', 'inprogress', 'completed']:
         return jsonify({'success': False, 'message': 'Status inválido'}), 400
+
     task.status = new_status
     db.session.commit()
-    event_data = {'task_id': task.id, 'new_status': new_status, 'title': task.title}
+
+    event_data = {'task_id': task.id, 'new_status': new_status}
     socketio.emit('task_updated', event_data, room=f'board-{task.board_id}')
+    
     return jsonify({'success': True, 'message': 'Status da tarefa atualizado.'})
 
 @main.route('/api/board/<int:board_id>/rename', methods=['POST'])
@@ -124,13 +132,24 @@ def rename_board(board_id):
     socketio.emit('board_renamed', event_data, room=f'board-{board.id}')
     return jsonify({'success': True, 'message': 'Quadro renomeado.'})
 
+# --- ROTAS PARA GERENCIAR UMA TAREFA ESPECÍFICA ---
+
 @main.route('/api/task/<int:task_id>')
 @login_required
 def get_task_details(task_id):
     task = Task.query.get_or_404(task_id)
     if current_user not in task.board.members:
         abort(403)
-    return jsonify({'id': task.id, 'title': task.title, 'description': task.description or ''})
+    
+    members = [{'id': member.id, 'username': member.username} for member in task.board.members]
+    
+    return jsonify({
+        'id': task.id,
+        'title': task.title,
+        'description': task.description or '',
+        'assignee_id': task.assignee_id,
+        'members': members
+    })
 
 @main.route('/api/task/<int:task_id>/update', methods=['POST'])
 @login_required
@@ -138,12 +157,24 @@ def update_task(task_id):
     task = Task.query.get_or_404(task_id)
     if current_user not in task.board.members:
         abort(403)
+    
     data = request.get_json()
     task.title = data.get('title', task.title)
     task.description = data.get('description', task.description)
+    
+    assignee_id = data.get('assignee_id')
+    if assignee_id and str(assignee_id).lower() != 'none':
+        task.assignee_id = int(assignee_id)
+    else:
+        task.assignee_id = None
+        
     db.session.commit()
-    event_data = {'task_id': task.id, 'new_title': task.title}
+    
+    assignee_info = {'id': task.assignee.id, 'username': task.assignee.username} if task.assignee else None
+    
+    event_data = {'task_id': task.id, 'new_title': task.title, 'assignee': assignee_info}
     socketio.emit('task_modified', event_data, room=f'board-{task.board_id}')
+    
     return jsonify({'success': True})
 
 @main.route('/api/task/<int:task_id>/delete', methods=['POST'])
@@ -152,12 +183,17 @@ def delete_task(task_id):
     task = Task.query.get_or_404(task_id)
     if current_user not in task.board.members:
         abort(403)
+        
     board_id = task.board_id
     db.session.delete(task)
     db.session.commit()
-    event_data = {'task_id': task_id, 'board_id': board_id}
+    
+    event_data = {'task_id': task_id}
     socketio.emit('task_deleted', event_data, room=f'board-{board_id}')
+    
     return jsonify({'success': True})
+
+# --- EVENTOS DO SOCKET.IO ---
 
 @socketio.on('join')
 def on_join(data):

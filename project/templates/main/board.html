@@ -15,30 +15,27 @@
     </div>
 </div>
 
-<div class="page-content" style="margin-top: 0; padding-top: 0;">
-    <div class="members-section">
-        <div class="card members-list">
-            <h4>Membros Atuais</h4>
-            <ul>
-                {% for member in board.members %}
-                    <li>{{ member.username }} {% if member.id == board.user_id %}(Dono){% endif %}</li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% if current_user.id == board.user_id %}
-        <div class="card invite-member-card">
-            <h4>Convidar Novo Membro</h4>
-            <form method="POST" action="{{ url_for('main.add_member', board_id=board.id) }}">
-                <div class="form-group">
-                    <input type="email" name="email" placeholder="Email do usuário" required>
-                    <button type="submit" class="btn">Convidar</button>
-                </div>
-            </form>
-        </div>
-        {% endif %}
+<div class="members-section">
+    <div class="card members-list">
+        <h4>Membros Atuais</h4>
+        <ul>
+            {% for member in board.members %}
+                <li>{{ member.username }} {% if member.id == board.user_id %}(Dono){% endif %}</li>
+            {% endfor %}
+        </ul>
     </div>
+    {% if current_user.id == board.user_id %}
+    <div class="card invite-member-card">
+        <h4>Convidar Novo Membro</h4>
+        <form method="POST" action="{{ url_for('main.add_member', board_id=board.id) }}">
+            <div class="form-group">
+                <input type="email" name="email" placeholder="Email do usuário" required>
+                <button type="submit" class="btn">Convidar</button>
+            </div>
+        </form>
+    </div>
+    {% endif %}
 </div>
-
 
 <div class="card add-task-card">
     <form class="add-task-form" method="POST" action="{{ url_for('main.add_task', board_id=board.id) }}">
@@ -56,59 +53,25 @@
 {% endwith %}
 
 <div class="kanban-board-container">
+    {% for status in ['pending', 'inprogress', 'completed'] %}
     <div class="kanban-column">
-        <h2 class="column-title">📋 Pendente</h2>
-        <div class="task-list" id="pending-list" data-status="pending">
-            {% for task in tasks.pending %}
+        <h2 class="column-title">
+            {% if status == 'pending' %}📋 Pendente{% elif status == 'inprogress' %}⚙️ Em Andamento{% else %}✅ Concluída{% endif %}
+        </h2>
+        <div class="task-list" id="{{ status }}-list" data-status="{{ status }}">
+            {% for task in tasks[status] %}
                 <div class="task-card" data-task-id="{{ task.id }}">
                     <div class="task-card-title">{{ task.title }}</div>
-                    {% if task.assignee %}
                     <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}">
-                        👤 {{ task.assignee.username }}
+                        {% if task.assignee %}
+                            👤 {{ task.assignee.username }}
+                        {% endif %}
                     </div>
-                    {% else %}
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}" style="display: none;"></div>
-                    {% endif %}
                 </div>
             {% endfor %}
         </div>
     </div>
-
-    <div class="kanban-column">
-        <h2 class="column-title">⚙️ Em Andamento</h2>
-        <div class="task-list" id="inprogress-list" data-status="inprogress">
-            {% for task in tasks.inprogress %}
-                <div class="task-card" data-task-id="{{ task.id }}">
-                    <div class="task-card-title">{{ task.title }}</div>
-                    {% if task.assignee %}
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}">
-                        👤 {{ task.assignee.username }}
-                    </div>
-                    {% else %}
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}" style="display: none;"></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
-
-    <div class="kanban-column">
-        <h2 class="column-title">✅ Concluída</h2>
-        <div class="task-list" id="completed-list" data-status="completed">
-            {% for task in tasks.completed %}
-                <div class="task-card" data-task-id="{{ task.id }}">
-                    <div class="task-card-title">{{ task.title }}</div>
-                    {% if task.assignee %}
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}">
-                        👤 {{ task.assignee.username }}
-                    </div>
-                    {% else %}
-                    <div class="task-card-assignee" id="assignee-for-task-{{ task.id }}" style="display: none;"></div>
-                    {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
+    {% endfor %}
 </div>
 
 <div id="task-modal" class="modal-overlay">
@@ -139,7 +102,6 @@
     </div>
 </div>
 {% endblock %}
-
 
 {% block scripts %}
     {{ super() }} 
