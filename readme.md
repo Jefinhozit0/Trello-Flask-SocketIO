@@ -54,9 +54,9 @@ Uma aplicação web full-stack completa, inspirada no Trello, que permite a gest
 
 ## Como Executar Localmente
 
-1.  **Clone o repositório** (depois de enviá-lo para o GitHub):
+1.  **Clone o repositório**:
     ```bash
-    git clone [https://github.com/seu-usuario/seu-repositorio.git](https://github.com/seu-usuario/seu-repositorio.git)
+    git clone [https://github.com/Jefinhozit0/Trello-Flask-SocketIO.git]
     cd seu-repositorio
     ```
 
