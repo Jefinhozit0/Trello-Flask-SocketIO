@@ -18,13 +18,6 @@
 
 ---
 
-## Demonstração Visual
-
-*É altamente recomendado gravar um GIF rápido mostrando as funcionalidades em ação, especialmente a colaboração em tempo real entre duas janelas de navegador.*
-
-![GIF de Demonstração do Trello Clone](https://i.imgur.com/uP1M2b6.png) 
-*(Substitua esta imagem por um GIF ou screenshot seu!)*
-
 ## 🚀 Funcionalidades Principais
 
 Este projeto vai além de um simples CRUD, implementando funcionalidades complexas para criar uma experiência de usuário rica e moderna.
