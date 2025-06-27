@@ -127,6 +127,6 @@ Siga os passos abaixo para rodar o projeto na sua máquina.
 **Jefferson**
 
 * **GitHub:** [@Jefinhozit0](https://github.com/Jefinhozit0)
-* **LinkedIn:** [Seu Perfil do LinkedIn Aqui](https://www.linkedin.com/)
+* **LinkedIn:** [Jefferson Silva](https://www.linkedin.com/in/jefferson7-dev)
 
 ---
